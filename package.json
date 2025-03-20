@@ -1,0 +1,20 @@
+{
+  "name": "explore_travel",
+  "version": "1.0.0",
+  "description": "<b>Calling All Open Source Contributors: Join Us in Shaping the Future of this Repository! Try Making Some Changes!</b> <br>\r [Enhancement: Add A Section For Contributors on The Home Page ](https://github.com/Yash-srivastav16/Tour-Project/issues/10) <br>\r [Enhancement: Separate Pages For Popular Packages ](https://github.com/Yash-srivastav16/Tour-Project/issues/9) <br><br>\r DEMO-> https://yash-srivastav16.github.io/Tour-Project/\r Tour &amp; Travel Project (Using Html, Css, Php, Javascript).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mongodb": "^6.9.0",
+    "mongoose": "^8.10.1",
+    "nodemailer": "^6.10.0"
+  }
+}
