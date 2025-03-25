@@ -70,11 +70,17 @@ app.post('/contact', async (req, res) => {
 
         // Send User Confirmation
         const userMailOptions = {
-            from: 'rollsrider@gmail.com',
+            from: 'your-email@gmail.com',
             to: email,
-            subject: "Thank You for Contacting Us!",
-            text: `Hi ${name}, Thank you for reaching out! We will get back to you soon.`
-        };
+            subject: 'Thank You for Contacting Us!',
+            html: `
+              <p>Hi ${name},</p>
+              <p>Thank you for reaching out to us. We have received your message and will get back to you soon.</p>
+              <p>Best regards,</p>
+              <p><strong>Travel.com Team</strong></p>
+            `
+          };
+          
 
         await transporter.sendMail(adminMailOptions);
         await transporter.sendMail(userMailOptions);
