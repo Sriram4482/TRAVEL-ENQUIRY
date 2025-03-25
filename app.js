@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 // Replace <db_password> with your actual database password
-const uri = 'mongodb+srv://22a31a4482:Inevirs@1234@travelcluster.l8bxf.mongodb.net/travelDB?retryWrites=true&w=majority';
+const uri = 'MONGO_URI=mongodb+srv://sriramsid2004:1PSMSe0gb8vp42dp@myconnections.domlh.mongodb.net/?retryWrites=true&w=majority&appName=MYCONNECTIONS';
 
 const client = new MongoClient(uri); // Removed deprecated options
 

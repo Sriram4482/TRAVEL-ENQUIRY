@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const path = require('path');
+require('dotenv').config(); // Load environment variables
 
 const app = express();
 const port = 3000;
@@ -14,18 +15,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-const mongoose = require('mongoose');
-require('dotenv').config();  // Load environment variables
-
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log('✅ MongoDB connected'))
-.catch(err => console.error('❌ MongoDB connection error:', err));
-
-
-
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log('✅ MongoDB connected'))
+    .catch(err => console.error('❌ MongoDB connection error:', err));
 
 
 // Define Contact Schema
@@ -42,8 +35,8 @@ const Contact = mongoose.model('Contact', contactSchema);
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'rollsrider582@gmail.com',  // ✅ Your Gmail (Admin's email)
-        pass: 'pkpa ymsn wwet nudp'      // ✅ Use App Password (not normal password)
+        user: 'rollsrider582@gmail.com',
+        pass: 'pkpa ymsn wwet nudp' // Use App Password
     }
 });
 
@@ -61,11 +54,10 @@ app.post('/contact', async (req, res) => {
         await newContact.save();
         console.log("✅ Contact saved successfully!");
 
-
-        // 🔹 Email to Admin (YOU)
+        // Send Admin Notification
         const adminMailOptions = {
-            from: 'your-email@gmail.com',  // ✅ Your email (sender)
-            to: 'rollsrider@gmail.com',    // ✅ Your email (Admin receives)
+            from: 'your-email@gmail.com',
+            to: 'rollsrider@gmail.com',
             subject: `New Contact Form Submission from ${name}`,
             text: `
                 Name: ${name}
@@ -76,26 +68,18 @@ app.post('/contact', async (req, res) => {
             `
         };
 
-        // 🔹 Email to User (Confirmation)
+        // Send User Confirmation
         const userMailOptions = {
-            from: 'rollsrider@gmail.com',  // ✅ Your email (sender)
-            to: email,                     // ✅ User's email (from form submission)
+            from: 'rollsrider@gmail.com',
+            to: email,
             subject: "Thank You for Contacting Us!",
-            text: `
-                Hi ${name},
-
-                Thank you for reaching out! We have received your message and will get back to you soon.
-
-                Best regards,
-                Travel.com Team
-            `
+            text: `Hi ${name}, Thank you for reaching out! We will get back to you soon.`
         };
 
-        // Send Emails
         await transporter.sendMail(adminMailOptions);
         await transporter.sendMail(userMailOptions);
 
-        return res.json({ success: true, message: '✅ Thanks for contacting us! A confirmation email has been sent to you.' });
+        return res.json({ success: true, message: '✅ Thanks for contacting us! A confirmation email has been sent.' });
 
     } catch (error) {
         console.error('❌ Error saving contact:', error);
