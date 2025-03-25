@@ -20,6 +20,7 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('✅ MongoDB connected'))
     .catch(err => console.error('❌ MongoDB connection error:', err));
 
+
 // Define Contact Schema
 const contactSchema = new mongoose.Schema({
     name: String,
@@ -50,10 +51,8 @@ app.post('/contact', async (req, res) => {
         const { name, email, phone, subject, message } = req.body;
 
         const newContact = new Contact({ name, email, phone, subject, message });
-        await newContact.save({ maxTimeMS: 5000 }); // Save with a 5-second timeout
+        await newContact.save();
         console.log("✅ Contact saved successfully!");
-
-        res.json({ success: true, message: '✅ Thanks for contacting us!' });
 
         // Send Admin Notification
         const adminMailOptions = {
@@ -77,11 +76,10 @@ app.post('/contact', async (req, res) => {
             text: `Hi ${name}, Thank you for reaching out! We will get back to you soon.`
         };
 
-        // Send emails asynchronously without blocking the response
-        Promise.allSettled([
-            transporter.sendMail(adminMailOptions),
-            transporter.sendMail(userMailOptions),
-        ]);
+        await transporter.sendMail(adminMailOptions);
+        await transporter.sendMail(userMailOptions);
+
+        return res.json({ success: true, message: '✅ Thanks for contacting us! A confirmation email has been sent.' });
 
     } catch (error) {
         console.error('❌ Error saving contact:', error);
